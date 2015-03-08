@@ -1,5 +1,6 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: "NikhilW"
 output: 
   html_document:
     keep_md: true
@@ -8,11 +9,20 @@ output:
 
 ## Loading and preprocessing the data
 
+```{r echo=FALSE}
+library(dplyr)
+data<-read.csv("activity.csv", header=TRUE, stringsAsFactors=FALSE)
+data<-tbl_df(data)
+```
 
 
 ## What is mean total number of steps taken per day?
 
-
+```{r}
+cleanDF<-filter(data, !is.na(steps))
+meandf<-cleanDF %>% group_by(date) %>% summarize(DailySteps=sum(steps))
+hist(meandf$DailySteps)
+```
 
 ## What is the average daily activity pattern?
 
