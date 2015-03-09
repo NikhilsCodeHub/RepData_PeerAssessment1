@@ -1,6 +1,5 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
-author: "NikhilW"
 output: 
   html_document:
     keep_md: true
@@ -9,8 +8,9 @@ output:
 
 ## Loading and preprocessing the data
 
-```{r echo=FALSE}
+```{r}
 library(dplyr)
+library(xtable)
 data<-read.csv("activity.csv", header=TRUE, stringsAsFactors=FALSE)
 data<-tbl_df(data)
 ```
@@ -18,15 +18,39 @@ data<-tbl_df(data)
 
 ## What is mean total number of steps taken per day?
 
+
+1. Filter out NA values in the steps.
 ```{r}
 cleanDF<-filter(data, !is.na(steps))
-meandf<-cleanDF %>% group_by(date) %>% summarize(DailySteps=sum(steps))
-hist(meandf$DailySteps)
+```
+
+2. Calculate the total steps grouped by Date.
+```{r}
+sumdf<-cleanDF %>% group_by(date) %>% summarize(DailySteps=sum(steps))
+```
+
+3. Plot the Histogram of total steps per day.
+```{r histogram}
+hist(sumdf$DailySteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
+```
+
+4. Calculating mean and median of total steps per day 
+
+- For this exercise we'll need to remove values with 0 steps.
+
+```{r, results='asis'}
+mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
+xt<-xtable(mean_median_df)
+print(xt, type="html", include.rownames=FALSE)
 ```
 
 ## What is the average daily activity pattern?
 
-
+1. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r}
+avg_daily_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
+plot(avg_daily_df$interval, avg_daily_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval")
+```
 
 ## Imputing missing values
 
