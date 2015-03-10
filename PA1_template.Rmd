@@ -39,8 +39,13 @@ hist(sumdf$DailySteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
 - For this exercise we'll need to remove values with 0 steps.
 
 ```{r, results='asis'}
+<<<<<<< Updated upstream
 mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
 
+=======
+## mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
+mean_median_df<-sumdf %>% summarize(mean_steps=mean(DailySteps), median_steps=median(DailySteps))
+>>>>>>> Stashed changes
 xt<-xtable(mean_median_df)
 print(xt, type="html", include.rownames=FALSE)
 ```
