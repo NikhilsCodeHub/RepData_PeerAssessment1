@@ -72,6 +72,11 @@ data2<-left_join(data, avg_daily_df, by=c("interval"="interval")) %>% mutate(ste
 ```
 
 
+3. Histogram
 
+```{r}
+newdata<-data2 %>% group_by(date) %>% summarize(TotalDailySteps=sum(steps))
+hist(newdata$TotalDailySteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
