@@ -1,13 +1,14 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
 
 
 ## Loading and preprocessing the data
 
+  The below code loads the libraries for ```dplyr``` and ```xtable```. Then loads the data file and converts it into dplyr dataframe.
 ```{r}
 library(dplyr)
 library(xtable)
@@ -19,69 +20,85 @@ data<-tbl_df(data)
 ## What is mean total number of steps taken per day?
 
 
-1. Filter out NA values in the steps.
+a. Filter out NA values in the steps.
 ```{r}
 cleanDF<-filter(data, !is.na(steps))
 ```
 
-2. Calculate the total steps grouped by Date.
+b. Calculate the total steps grouped by Date.
 ```{r}
-sumdf<-cleanDF %>% group_by(date) %>% summarize(DailySteps=sum(steps))
+DailySumdf<-cleanDF %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
 ```
 
-3. Plot the Histogram of total steps per day.
+c. Plot the Histogram of total steps per day.
 ```{r histogram}
-hist(sumdf$DailySteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
+hist(DailySumdf$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
 ```
 
-4. Calculating mean and median of total steps per day 
+d. Calculating mean and median of total steps per day 
 
-- For this exercise we'll need to remove values with 0 steps.
 
 ```{r, results='asis'}
-<<<<<<< Updated upstream
-mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
 
-=======
 ## mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
-mean_median_df<-sumdf %>% summarize(mean_steps=mean(DailySteps), median_steps=median(DailySteps))
->>>>>>> Stashed changes
+
+mean_median_df<-DailySumdf %>% summarize(mean_steps=mean(TotalSteps), median_steps=median(TotalSteps))
+
 xt<-xtable(mean_median_df)
 print(xt, type="html", include.rownames=FALSE)
 ```
 
 ## What is the average daily activity pattern?
 
-1. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+a. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
-avg_daily_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
-plot(avg_daily_df$interval, avg_daily_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval")
+avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
+plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval")
 ```
 
 ## Imputing missing values
 
-1. Total rows with NA's
+a. To compute Total rows with NA's 
 
 ```{r}
 naData<- filter(data, is.na(steps))
 dim(naData)[1]
 ```
+  Total Rows having NAs : 2304
 
-2. In order to fill in missing values, we'll use mean for the 5-minute interval.
-   - The below code joins the original dataset (having NA's) to mean steps per Interval.
-   - Then updates the "steps" in original dataset to the "mean_steps" if original has NA value.
+
+
+b. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
+   - The below code joins the original dataset (having NA's) to mean steps per Interval (```avg_daily_pat_df```).
+   - Then for the NA values, updates the "steps" variable in original dataset to the "mean_steps".
    - The final output with NA's filled-in is stored in data2.
 
 ```{r}
-data2<-left_join(data, avg_daily_df, by=c("interval"="interval")) %>% mutate(steps=ifelse(is.na(steps), mean_steps,steps)) %>% select(steps, date, interval)
+data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>% mutate(steps=ifelse(is.na(steps), mean_steps,steps)) %>% select(steps, date, interval)
 ```
 
 
-3. Histogram
+c. Lets calculate the mean and median of Total Steps per day for the new dataset.
+
+```{r results='asis'}
+DailySumdf2<-data2 %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
+mean_median_df2<-DailySumdf2 %>% summarize(mean_steps=mean(TotalSteps), median_steps=median(TotalSteps))
+
+xt<-xtable(mean_median_df2)
+print(xt, type="html", include.rownames=FALSE)
+```
+
+
+c. Histogram
 
 ```{r}
-newdata<-data2 %>% group_by(date) %>% summarize(TotalDailySteps=sum(steps))
-hist(newdata$TotalDailySteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
+
+hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps (Imputing NA")
 ```
 
+The mean and median from previous analysis isnt much different from the mean and median after imputing the NA values.
+
 ## Are there differences in activity patterns between weekdays and weekends?
+
+data2<- data2 
+
