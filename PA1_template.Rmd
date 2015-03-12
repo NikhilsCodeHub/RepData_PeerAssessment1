@@ -68,7 +68,7 @@ __a__. To compute Total rows with NA's.
 naData<- filter(data, is.na(steps))
 dim(naData)[1]
 ```
-  Total Rows having NAs : 2304
+  Total Rows having NAs : ```r dim(naData)[1]```
 
 
 

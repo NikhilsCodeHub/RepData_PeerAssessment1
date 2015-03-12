@@ -66,7 +66,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:40:56 2015 -->
+<!-- Thu Mar 12 15:50:20 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10765 </td> </tr>
@@ -100,7 +100,7 @@ dim(naData)[1]
 ```
 ## [1] 2304
 ```
-  Total Rows having NAs : 2304
+  Total Rows having NAs : ``2304``
 
 
 
@@ -130,7 +130,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:40:56 2015 -->
+<!-- Thu Mar 12 15:50:20 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
