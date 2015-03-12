@@ -12,6 +12,8 @@ output:
 ```{r}
 library(dplyr)
 library(xtable)
+library(lubridate)
+library(ggplot2)
 data<-read.csv("activity.csv", header=TRUE, stringsAsFactors=FALSE)
 data<-tbl_df(data)
 ```
@@ -91,6 +93,7 @@ print(xt, type="html", include.rownames=FALSE)
 
 c. Histogram
 
+
 ```{r}
 
 hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps (Imputing NA")
@@ -100,5 +103,10 @@ The mean and median from previous analysis isnt much different from the mean and
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-data2<- data2 
+```{r}
+data2<-mutate(data2, wkday=ifelse(wday(ymd(date))==7 | wday(ymd(date))==1, "weekend","weekday"))
+avg_daily_pat_df2<-data2 %>% group_by(interval, wkday) %>% summarize(mean_steps=mean(steps))
+g<-ggplot(avg_daily_pat_df2, aes(interval,mean_steps)) + geom_line(colour="blue",size=1) + facet_wrap(~wkday, ncol=1) + labs(title="Avg Daily Activity (Weekday v/s Weekend)", x="Interval", y="Avg Number of Steps")
+print(g)
 
+```
