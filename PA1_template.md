@@ -7,24 +7,7 @@
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 library(xtable)
-
 
 data<-read.csv("activity.csv", header=TRUE, stringsAsFactors=FALSE)
 data<-tbl_df(data)
@@ -66,7 +49,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 15:50:20 2015 -->
+<!-- Thu Mar 12 15:57:12 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10765 </td> </tr>
@@ -130,7 +113,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 15:50:20 2015 -->
+<!-- Thu Mar 12 15:57:12 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
@@ -148,6 +131,7 @@ hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps 
 ![](PA1_template_files/figure-html/histogram2-1.png) 
 
 The mean and median from previous analysis isnt much different from the mean and median after imputing the NA values.
+
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

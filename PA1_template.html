@@ -67,19 +67,8 @@ img {
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <p>The below code loads the libraries for <code>dplyr</code> and <code>xtable</code>. Then loads the data file and converts it into dplyr dataframe.</p>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(xtable)
-
+<pre class="r"><code>library(dplyr)
+library(xtable)
 
 data&lt;-read.csv(&quot;activity.csv&quot;, header=TRUE, stringsAsFactors=FALSE)
 data&lt;-tbl_df(data)</code></pre>
@@ -99,7 +88,7 @@ data&lt;-tbl_df(data)</code></pre>
 xt&lt;-xtable(mean_median_df)
 print(xt, type=&quot;html&quot;, include.rownames=FALSE)</code></pre>
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 15:50:20 2015 -->
+<!-- Thu Mar 12 15:57:12 2015 -->
 <table border="1">
 <tr> <th> 
 mean_steps
@@ -142,7 +131,7 @@ mean_median_df2&lt;-DailySumdf2 %&gt;% summarize(mean_steps=mean(TotalSteps), me
 xt&lt;-xtable(mean_median_df2)
 print(xt, type=&quot;html&quot;, include.rownames=FALSE)</code></pre>
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 15:50:20 2015 -->
+<!-- Thu Mar 12 15:57:12 2015 -->
 <table border="1">
 <tr> <th> 
 mean_steps
