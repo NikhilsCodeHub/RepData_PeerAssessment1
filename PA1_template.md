@@ -66,7 +66,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:14:09 2015 -->
+<!-- Thu Mar 12 13:25:16 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10765 </td> </tr>
@@ -78,6 +78,7 @@ a. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the 
 
 ```r
 avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
+
 plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval", main="Avg Daily Activity")
 ```
 
@@ -127,7 +128,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:14:09 2015 -->
+<!-- Thu Mar 12 13:25:16 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
@@ -147,6 +148,10 @@ hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps 
 The mean and median from previous analysis isnt much different from the mean and median after imputing the NA values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+  - To generate the plot we add another variable to the ```data2``` dataset ```wkday``` to indicate weekday or weekend.
+  - Based on the below plot we can conclude that there is significant difference in activity levels between weekday and weekend.
+  - 
 
 
 ```r
