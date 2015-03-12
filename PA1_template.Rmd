@@ -53,6 +53,7 @@ print(xt, type="html", include.rownames=FALSE)
 a. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r avgDailyActivity1}
 avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
+
 plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval", main="Avg Daily Activity")
 ```
 
@@ -104,6 +105,10 @@ hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps 
 The mean and median from previous analysis isnt much different from the mean and median after imputing the NA values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+  - To generate the plot we add another variable to the ```data2``` dataset ```wkday``` to indicate weekday or weekend.
+  - Based on the below plot we can conclude that there is significant difference in activity levels between weekday and weekend.
+  - 
 
 ```{r avgDailyActivity2}
 library(lubridate)
