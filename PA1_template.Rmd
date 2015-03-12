@@ -12,8 +12,8 @@ output:
 ```{r}
 library(dplyr)
 library(xtable)
-library(lubridate)
-library(ggplot2)
+
+
 data<-read.csv("activity.csv", header=TRUE, stringsAsFactors=FALSE)
 data<-tbl_df(data)
 ```
@@ -55,7 +55,7 @@ print(xt, type="html", include.rownames=FALSE)
 a. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
 avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
-plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval")
+plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval", main="Avg Daily Activity")
 ```
 
 ## Imputing missing values
@@ -104,8 +104,11 @@ The mean and median from previous analysis isnt much different from the mean and
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ```{r}
+library(lubridate)
 data2<-mutate(data2, wkday=ifelse(wday(ymd(date))==7 | wday(ymd(date))==1, "weekend","weekday"))
 avg_daily_pat_df2<-data2 %>% group_by(interval, wkday) %>% summarize(mean_steps=mean(steps))
+
+library(ggplot2)
 g<-ggplot(avg_daily_pat_df2, aes(interval,mean_steps)) + geom_line(colour="blue",size=1) + facet_wrap(~wkday, ncol=1) + labs(title="Avg Daily Activity (Weekday v/s Weekend)", x="Interval", y="Avg Number of Steps")
 print(g)
 
