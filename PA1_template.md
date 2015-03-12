@@ -34,19 +34,19 @@ data<-tbl_df(data)
 ## What is mean total number of steps taken per day?
 
 
-a. Filter out NA values in the steps.
+__a__. Filter out NA values in the steps.
 
 ```r
 cleanDF<-filter(data, !is.na(steps))
 ```
 
-b. Calculate the total steps grouped by Date.
+__b__. Calculate the total steps grouped by Date.
 
 ```r
 DailySumdf<-cleanDF %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
 ```
 
-c. Plot the Histogram of total steps per day.
+__c__. Plot the Histogram of total steps per day.
 
 ```r
 hist(DailySumdf$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
@@ -54,7 +54,7 @@ hist(DailySumdf$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
 
 ![](PA1_template_files/figure-html/histogram1-1.png) 
 
-d. Calculating mean and median of total steps per day 
+__d__. Calculating mean and median of total steps per day 
 
 
 
@@ -66,15 +66,16 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:25:16 2015 -->
+<!-- Thu Mar 12 13:40:56 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10765 </td> </tr>
    </table>
 
+
 ## What is the average daily activity pattern?
 
-a. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+__a__. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ```r
 avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
@@ -84,9 +85,10 @@ plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg 
 
 ![](PA1_template_files/figure-html/avgDailyActivity1-1.png) 
 
+
 ## Imputing missing values
 
-a. To compute Total rows with NA's.
+__a__. To compute Total rows with NA's.
    - We use the original dataset ```data```. then use  dplyr function ```filter```.
 
 
@@ -102,7 +104,7 @@ dim(naData)[1]
 
 
 
-b. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
+__b__. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
    - The below code joins the original dataset (having NA's) to mean steps per Interval (```avg_daily_pat_df```).
    - Then for the NA values, updates the "steps" variable in original dataset to the "mean_steps".
    - The final output with NA's filled-in is stored in ```data2```.
@@ -115,7 +117,7 @@ data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>%
 ```
 
 
-c. Lets calculate the mean and median of Total Steps per day for the new dataset.
+__c__. Lets calculate the mean and median of Total Steps per day for the new dataset.
 
 
 ```r
@@ -128,14 +130,14 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 13:25:16 2015 -->
+<!-- Thu Mar 12 13:40:56 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
    </table>
 
 
-c. Histogram
+__d__. Histogram
 
 
 
@@ -147,11 +149,12 @@ hist(DailySumdf2$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps 
 
 The mean and median from previous analysis isnt much different from the mean and median after imputing the NA values.
 
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
   - To generate the plot we add another variable to the ```data2``` dataset ```wkday``` to indicate weekday or weekend.
   - Based on the below plot we can conclude that there is significant difference in activity levels between weekday and weekend.
-  - 
+
 
 
 ```r
