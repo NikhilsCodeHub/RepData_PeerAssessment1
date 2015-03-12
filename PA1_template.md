@@ -59,8 +59,6 @@ d. Calculating mean and median of total steps per day
 
 
 ```r
-## mean_median_df<-cleanDF %>% group_by(date) %>% filter(steps>0) %>% summarize(mean_steps=mean(steps), median_steps=median(steps))
-
 mean_median_df<-DailySumdf %>% summarize(mean_steps=mean(TotalSteps), median_steps=median(TotalSteps))
 
 xt<-xtable(mean_median_df)
@@ -68,7 +66,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 11:14:13 2015 -->
+<!-- Thu Mar 12 13:14:09 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10765 </td> </tr>
@@ -87,7 +85,8 @@ plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg 
 
 ## Imputing missing values
 
-a. To compute Total rows with NA's 
+a. To compute Total rows with NA's.
+   - We use the original dataset ```data```. then use  dplyr function ```filter```.
 
 
 ```r
@@ -105,11 +104,13 @@ dim(naData)[1]
 b. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
    - The below code joins the original dataset (having NA's) to mean steps per Interval (```avg_daily_pat_df```).
    - Then for the NA values, updates the "steps" variable in original dataset to the "mean_steps".
-   - The final output with NA's filled-in is stored in data2.
+   - The final output with NA's filled-in is stored in ```data2```.
 
 
 ```r
-data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>% mutate(steps=ifelse(is.na(steps), mean_steps,steps)) %>% select(steps, date, interval)
+data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>% 
+          mutate(steps=ifelse(is.na(steps), mean_steps,steps)) %>% 
+          select(steps, date, interval)
 ```
 
 
@@ -118,6 +119,7 @@ c. Lets calculate the mean and median of Total Steps per day for the new dataset
 
 ```r
 DailySumdf2<-data2 %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
+
 mean_median_df2<-DailySumdf2 %>% summarize(mean_steps=mean(TotalSteps), median_steps=median(TotalSteps))
 
 xt<-xtable(mean_median_df2)
@@ -125,7 +127,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 <!-- html table generated in R 3.1.2 by xtable 1.7-4 package -->
-<!-- Thu Mar 12 11:14:13 2015 -->
+<!-- Thu Mar 12 13:14:09 2015 -->
 <table border=1>
 <tr> <th> mean_steps </th> <th> median_steps </th>  </tr>
   <tr> <td align="right"> 10766.19 </td> <td align="right"> 10766.19 </td> </tr>
@@ -153,7 +155,10 @@ data2<-mutate(data2, wkday=ifelse(wday(ymd(date))==7 | wday(ymd(date))==1, "week
 avg_daily_pat_df2<-data2 %>% group_by(interval, wkday) %>% summarize(mean_steps=mean(steps))
 
 library(ggplot2)
-g<-ggplot(avg_daily_pat_df2, aes(interval,mean_steps)) + geom_line(colour="blue",size=1) + facet_wrap(~wkday, ncol=1) + labs(title="Avg Daily Activity (Weekday v/s Weekend)", x="Interval", y="Avg Number of Steps")
+g<-ggplot(avg_daily_pat_df2, aes(interval,mean_steps)) + 
+    geom_line(colour="blue",size=1) + 
+    facet_wrap(~wkday, ncol=1) + 
+    labs(title="Avg Daily Activity (Weekday v/s Weekend)", x="Interval", y="Avg Number of Steps")
 print(g)
 ```
 
