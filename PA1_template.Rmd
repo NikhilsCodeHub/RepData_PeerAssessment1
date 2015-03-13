@@ -21,17 +21,17 @@ data<-tbl_df(data)
 ## What is mean total number of steps taken per day?
 
 
-__a__. Filter out NA values in the steps.
+__1__. Filter out NA values in the steps.
 ```{r cleanData}
 cleanDF<-filter(data, !is.na(steps))
 ```
 
-__b__. Calculate the total steps grouped by Date.
+__2__. Calculate the total steps grouped by Date.
 ```{r DailySum}
 DailySumdf<-cleanDF %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
 ```
 
-__c__. Plot the Histogram of total steps per day.
+__3__. Plot the Histogram of total steps per day.
 ```{r histogram1}
 hist(DailySumdf$TotalSteps, xlab="Daily_Steps", main="Histogram of Daily Steps")
 ```
@@ -50,17 +50,26 @@ print(xt, type="html", include.rownames=FALSE)
 
 ## What is the average daily activity pattern?
 
-__a__. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r avgDailyActivity1}
+__1__. Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r plotDailyActivity1}
 avg_daily_pat_df<-cleanDF %>% group_by(interval) %>% summarize(mean_steps=mean(steps))
 
 plot(avg_daily_pat_df$interval, avg_daily_pat_df$mean_steps, type="l",ylab="Avg Daily Steps", xlab="Interval", main="Avg Daily Activity")
 ```
 
 
+__2__. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+   - The interval is ```r filter(avg_daily_pat_df, mean_steps==max(mean_steps)) %>% select(interval)```.
+   - This can be calculated as such
+```{r maxstepsInterval}
+  filter(avg_daily_pat_df, mean_steps==max(mean_steps)) %>% select(interval)
+```
+
 ## Imputing missing values
 
-__a__. To compute Total rows with NA's.
+__1__. To compute Total rows with NA's.
+
    - We use the original dataset ```data```. then use  dplyr function ```filter```.
 
 ```{r NArows}
@@ -71,10 +80,11 @@ dim(naData)[1]
 
 
 
-__b__. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
-   - The below code joins the original dataset (having NA's) to mean steps per Interval (```avg_daily_pat_df```).
+__2__. In order to fill in missing (NA) values with some meaning full data, we'll use mean steps for each of the corresponding 5-minute interval.
+
+   - The below code joins the original dataset `data` (having NA's) to mean steps per Interval (`avg_daily_pat_df`).
    - Then for the NA values, updates the "steps" variable in original dataset to the "mean_steps".
-   - The final output with NA's filled-in is stored in ```data2```.
+   - The final output with NA's filled-in is stored in `data2`.
 
 ```{r imputingNA}
 data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>% 
@@ -83,7 +93,7 @@ data2<-left_join(data, avg_daily_pat_df, by=c("interval"="interval")) %>%
 ```
 
 
-__c__. Lets calculate the mean and median of Total Steps per day for the new dataset.
+__3__. Lets calculate the mean and median of Total Steps per day for the new dataset.
 
 ```{r meanSteps2, results='asis'}
 DailySumdf2<-data2 %>% group_by(date) %>% summarize(TotalSteps=sum(steps))
@@ -95,7 +105,7 @@ print(xt, type="html", include.rownames=FALSE)
 ```
 
 
-__d__. Histogram
+__4__. Histogram
 
 
 ```{r histogram2}
@@ -110,14 +120,20 @@ The mean and median from previous analysis isnt much different from the mean and
 ## Are there differences in activity patterns between weekdays and weekends?
 
   - To generate the plot we add another variable to the ```data2``` dataset ```wkday``` to indicate weekday or weekend.
-  - Based on the below plot we can conclude that there is significant difference in activity levels between weekday and weekend.
 
 
 ```{r avgDailyActivity2}
 library(lubridate)
 data2<-mutate(data2, wkday=ifelse(wday(ymd(date))==7 | wday(ymd(date))==1, "weekend","weekday"))
-avg_daily_pat_df2<-data2 %>% group_by(interval, wkday) %>% summarize(mean_steps=mean(steps))
 
+avg_daily_pat_df2<-data2 %>% 
+                  group_by(interval, wkday) %>% 
+                  summarize(mean_steps=mean(steps))
+```
+
+  - Based on the below plot we can conclude that there is significant difference in activity levels between weekday and weekend.
+
+```{r plotDailyActivity2}
 library(ggplot2)
 g<-ggplot(avg_daily_pat_df2, aes(interval,mean_steps)) + 
     geom_line(colour="blue",size=1) + 
